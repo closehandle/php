@@ -23,11 +23,11 @@ jobs:
         with:
           context: '7.4'
           push: true
-          tags: closehandle/php:7.4-alpine-fpm
+          tags: closehandle/php:7.4-fpm-alpine
 
       - name: Build 8.2 FPM
         uses: docker/build-push-action@v4
         with:
           context: '8.2'
           push: true
-          tags: closehandle/php:8.2-alpine-fpm
+          tags: closehandle/php:7.4-fpm-alpine
