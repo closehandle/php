@@ -30,4 +30,4 @@ jobs:
         with:
           context: '8.2'
           push: true
-          tags: closehandle/php:7.4-fpm-alpine
+          tags: closehandle/php:8.2-fpm-alpine
