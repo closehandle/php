@@ -31,3 +31,10 @@ jobs:
           context: '8.2'
           push: true
           tags: closehandle/php:8.2-fpm-alpine
+
+      - name: Build 8.3 FPM
+        uses: docker/build-push-action@v4
+        with:
+          context: '8.3'
+          push: true
+          tags: closehandle/php:8.3-fpm-alpine
