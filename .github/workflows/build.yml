@@ -1,9 +1,13 @@
 name: build
 on:
   schedule:
-    - cron: '0 20 * * *'
+    - cron: '0 16 * * 1'
   push:
     branches: [ "main" ]
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
 
 jobs:
   PHP-74:
