@@ -1,4 +1,4 @@
-FROM php:8.1-fpm-alpine
+FROM php:8.0-fpm-alpine
 
 RUN apk --update --no-cache upgrade && \
     apk --update --no-cache add bash
@@ -16,7 +16,6 @@ RUN install-php-extensions \
     imagick-stable \
     imap-stable \
     intl-stable \
-    ioncube_loader-stable \
     ldap-stable \
     mysqli-stable \
     opcache-stable \
