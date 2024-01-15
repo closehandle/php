@@ -10,25 +10,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  PHP-80:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-      - name: Docker Build
-        uses: docker/build-push-action@v5
-        with:
-          context: '8.0'
-          push: true
-          tags: closehandle/php:8.0-fpm-alpine
-
   PHP-81:
     runs-on: ubuntu-latest
     steps:
