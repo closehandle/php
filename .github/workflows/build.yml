@@ -28,7 +28,7 @@ jobs:
         with:
           context: '7.4'
           push: true
-          tags: closehandle/php:7.4-fpm-alpine
+          tags: closehandle/php:7.4-fpm
 
   PHP-80:
     runs-on: ubuntu-latest
@@ -47,7 +47,7 @@ jobs:
         with:
           context: '8.0'
           push: true
-          tags: closehandle/php:8.0-fpm-alpine
+          tags: closehandle/php:8.0-fpm
 
   PHP-81:
     runs-on: ubuntu-latest
@@ -66,7 +66,7 @@ jobs:
         with:
           context: '8.1'
           push: true
-          tags: closehandle/php:8.1-fpm-alpine
+          tags: closehandle/php:8.1-fpm
 
   PHP-82:
     runs-on: ubuntu-latest
@@ -85,7 +85,7 @@ jobs:
         with:
           context: '8.2'
           push: true
-          tags: closehandle/php:8.2-fpm-alpine
+          tags: closehandle/php:8.2-fpm
 
   PHP-83:
     runs-on: ubuntu-latest
@@ -104,4 +104,4 @@ jobs:
         with:
           context: '8.3'
           push: true
-          tags: closehandle/php:8.3-fpm-alpine
+          tags: closehandle/php:8.3-fpm
