@@ -1,7 +1,9 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.2-fpm
 
-RUN apk --no-cache upgrade && \
-    apk --no-cache add bash
+RUN apt update && \
+    apt full-upgrade -y && \
+    apt autoremove --purge -y && \
+    apt clean
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/bin/
 RUN chmod +x /usr/bin/install-php-extensions && install-php-extensions \
