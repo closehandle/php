@@ -28,15 +28,16 @@ RUN chmod +x /usr/bin/install-php-extensions && install-php-extensions \
 
 ADD entrypoint.sh /usr/bin/entrypoint.sh
 ADD docker.conf   /usr/local/etc/php-fpm.d/docker.conf
-RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/conf.d/php.ini
-RUN rm -f /usr/local/etc/php-fpm.d/www.conf
-RUN rm -f /usr/local/etc/php-fpm.d/www.conf.default
-RUN rm -f /usr/local/etc/php-fpm.d/zz-docker.conf
-RUN sed -E -i 's|^;date.timezone =.*|date.timezone = Asia/Shanghai|g' /usr/local/etc/php/conf.d/php.ini
-RUN sed -E -i 's|^post_max_size = .*|post_max_size = 1024M|g' /usr/local/etc/php/conf.d/php.ini
-RUN sed -E -i 's|^upload_max_filesize = .*|upload_max_filesize = 1024M|g' /usr/local/etc/php/conf.d/php.ini
-RUN sed -E -i 's|^max_execution_time = .*|max_execution_time = 30|g' /usr/local/etc/php/conf.d/php.ini
-RUN sed -E -i 's|^short_open_tag = .*|short_open_tag = On|g' /usr/local/etc/php/conf.d/php.ini
-RUN sed -E -i 's|^expose_php = .*|expose_php = Off|g' /usr/local/etc/php/conf.d/php.ini
+RUN chmod +x /usr/bin/entrypoint.sh && \
+    cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/conf.d/php.ini && \
+    rm -f /usr/local/etc/php-fpm.d/www.conf && \
+    rm -f /usr/local/etc/php-fpm.d/www.conf.default && \
+    rm -f /usr/local/etc/php-fpm.d/zz-docker.conf && \
+    sed -E -i 's|^;date.timezone =.*|date.timezone = Asia/Shanghai|g' /usr/local/etc/php/conf.d/php.ini && \
+    sed -E -i 's|^post_max_size = .*|post_max_size = 1024M|g' /usr/local/etc/php/conf.d/php.ini && \
+    sed -E -i 's|^upload_max_filesize = .*|upload_max_filesize = 1024M|g' /usr/local/etc/php/conf.d/php.ini && \
+    sed -E -i 's|^max_execution_time = .*|max_execution_time = 30|g' /usr/local/etc/php/conf.d/php.ini && \
+    sed -E -i 's|^short_open_tag = .*|short_open_tag = On|g' /usr/local/etc/php/conf.d/php.ini && \
+    sed -E -i 's|^expose_php = .*|expose_php = Off|g' /usr/local/etc/php/conf.d/php.ini
 
 CMD ["/usr/bin/entrypoint.sh"]
