@@ -9,20 +9,15 @@ RUN install-php-extensions \
     bz2-stable \
     exif-stable \
     gd-stable \
-    gmp-stable \
-    igbinary-stable \
     imagick-stable \
     imap-stable \
     intl-stable \
     ioncube_loader-stable \
-    ldap-stable \
     mysqli-stable \
     opcache-stable \
     pcntl-stable \
     pdo_mysql-stable \
     redis-stable \
-    sockets-stable \
-    ssh2-stable \
     zip-stable
 
 ADD entrypoint.sh /usr/bin/entrypoint.sh
