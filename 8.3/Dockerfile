@@ -12,7 +12,6 @@ RUN chmod +x /usr/bin/install-php-extensions && install-php-extensions \
     gd \
     gmp \
     igbinary \
-    imagick \
     imap \
     intl \
     ldap \
