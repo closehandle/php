@@ -1,24 +1,30 @@
 FROM php:7.4-fpm-alpine
 
-RUN apk --no-cache add bash
+RUN apk --no-cache upgrade && \
+    apk --no-cache add bash
 
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-RUN chmod +x /usr/local/bin/install-php-extensions
-RUN install-php-extensions \
-    bcmath-stable \
-    bz2-stable \
-    exif-stable \
-    gd-stable \
-    imagick-stable \
-    imap-stable \
-    intl-stable \
-    ioncube_loader-stable \
-    mysqli-stable \
-    opcache-stable \
-    pcntl-stable \
-    pdo_mysql-stable \
-    redis-stable \
-    zip-stable
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/bin/
+RUN chmod +x /usr/bin/install-php-extensions && install-php-extensions \
+    apcu \
+    bcmath \
+    bz2 \
+    exif \
+    gd \
+    gmp \
+    igbinary \
+    imagick \
+    imap \
+    intl \
+    ioncube_loader \
+    ldap \
+    mysqli \
+    opcache \
+    pcntl \
+    pdo_mysql \
+    redis \
+    sockets \
+    ssh2 \
+    zip
 
 ADD entrypoint.sh /usr/bin/entrypoint.sh
 ADD docker.conf   /usr/local/etc/php-fpm.d/docker.conf
