@@ -12,12 +12,8 @@ group = root
 listen = 0.0.0.0:9000
 listen.backlog = -1
 
-pm = dynamic
+pm = static
 pm.max_children = $size
-pm.start_servers = $size
-pm.min_spare_servers = 8
-pm.max_spare_servers = $size
-pm.process_idle_timeout = 10
 pm.max_requests = 1024
 request_terminate_timeout = 30
 request_slowlog_timeout = 0
