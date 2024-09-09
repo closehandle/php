@@ -9,7 +9,7 @@ if [[ ! -f /usr/local/etc/php-fpm.d/www.conf ]]; then
 [www]
 user = root
 group = root
-listen = 0.0.0.0:9000
+listen = $FPM_BIND:$FPM_PORT
 listen.backlog = -1
 
 pm = dynamic

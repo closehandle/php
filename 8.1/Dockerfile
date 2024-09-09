@@ -47,4 +47,7 @@ RUN chmod +x /usr/bin/entrypoint.sh && \
     sed -E -i 's|^;opcache.max_accelerated_files=10000|opcache.max_accelerated_files = 1000000|g' /usr/local/etc/php/conf.d/php.ini && \
     sed -E -i 's|^;opcache.validate_timestamps=1|opcache.validate_timestamps = 0|g' /usr/local/etc/php/conf.d/php.ini
 
+ENV FPM_BIND=0.0.0.0
+ENV FPM_PORT=9000
+
 CMD ["/usr/bin/entrypoint.sh"]
