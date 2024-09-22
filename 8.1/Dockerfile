@@ -9,16 +9,21 @@ ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/do
 RUN chmod +x /usr/bin/install-php-extensions && install-php-extensions \
     apcu \
     bcmath \
+    bitset \
     bz2 \
     exif \
     gd \
     gmp \
+    grpc \
     igbinary \
     imagick \
     imap \
     intl \
     ioncube_loader \
     ldap \
+    lz4 \
+    lzf \
+	msgpack \
     mysqli \
     opcache \
     pcntl \
@@ -26,7 +31,12 @@ RUN chmod +x /usr/bin/install-php-extensions && install-php-extensions \
     redis \
     sockets \
     ssh2 \
-    zip
+    sync \
+	tidy \
+    uuid \
+	yaml \
+    zip \
+    zstd
 
 ADD entrypoint.sh /usr/bin/entrypoint.sh
 ADD docker.conf   /usr/local/etc/php-fpm.d/docker.conf
