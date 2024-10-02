@@ -13,11 +13,13 @@ RUN chmod +x /usr/bin/install-php-extensions && install-php-extensions \
     bz2 \
     exif \
     gd \
+    gmagick \
     gmp \
     grpc \
     igbinary \
     imap \
     intl \
+    ioncube_loader \
     ldap \
     lz4 \
     lzf \
