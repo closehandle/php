@@ -29,6 +29,7 @@ RUN chmod +x /usr/bin/install-php-extensions && install-php-extensions \
     pcntl \
     pdo_mysql \
     redis \
+    soap \
     sockets \
     ssh2 \
     sync \
