@@ -319,7 +319,7 @@ RUN chmod +x /usr/bin/entrypoint.sh && \
     sed -E -i 's|^;?date.timezone =.*|date.timezone = Asia/Shanghai|g' /usr/local/etc/php/conf.d/php.ini && \
     sed -E -i 's|^;?post_max_size = .*|post_max_size = 100M|g' /usr/local/etc/php/conf.d/php.ini && \
     sed -E -i 's|^;?upload_max_filesize = .*|upload_max_filesize = 100M|g' /usr/local/etc/php/conf.d/php.ini && \
-    sed -E -i 's|^;?max_execution_time = .*|max_execution_time = 30|g' /usr/local/etc/php/conf.d/php.ini && \
+    sed -E -i 's|^;?max_execution_time = .*|max_execution_time = 120|g' /usr/local/etc/php/conf.d/php.ini && \
     sed -E -i 's|^;?short_open_tag = .*|short_open_tag = Off|g' /usr/local/etc/php/conf.d/php.ini && \
     sed -E -i 's|^;?expose_php = .*|expose_php = Off|g' /usr/local/etc/php/conf.d/php.ini && \
     sed -E -i 's|^;?opcache.enable=1|opcache.enable = 1|g' /usr/local/etc/php/conf.d/php.ini && \

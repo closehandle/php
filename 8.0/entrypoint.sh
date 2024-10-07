@@ -18,7 +18,7 @@ pm.min_spare_servers = $size
 pm.max_spare_servers = $(( $size * 4 ))
 pm.max_children = $(( $size * 4 * 4 ))
 pm.max_requests = 1024
-request_terminate_timeout = 30
+request_terminate_timeout = 120
 request_slowlog_timeout = 0
 EOF
 fi
