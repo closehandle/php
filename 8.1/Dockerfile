@@ -46,19 +46,20 @@ RUN chmod +x /usr/bin/entrypoint.sh && \
     rm -f /usr/local/etc/php-fpm.d/www.conf && \
     rm -f /usr/local/etc/php-fpm.d/www.conf.default && \
     rm -f /usr/local/etc/php-fpm.d/zz-docker.conf && \
-    sed -E -i 's|^;?date.timezone =.*|date.timezone = Asia/Shanghai|g' /usr/local/etc/php/conf.d/php.ini && \
-    sed -E -i 's|^;?post_max_size = .*|post_max_size = 100M|g' /usr/local/etc/php/conf.d/php.ini && \
-    sed -E -i 's|^;?upload_max_filesize = .*|upload_max_filesize = 100M|g' /usr/local/etc/php/conf.d/php.ini && \
-    sed -E -i 's|^;?max_execution_time = .*|max_execution_time = 120|g' /usr/local/etc/php/conf.d/php.ini && \
-    sed -E -i 's|^;?max_input_time = .*|max_input_time = 30|g' /usr/local/etc/php/conf.d/php.ini && \
-    sed -E -i 's|^;?memory_limit = .*|memory_limit = 512M|g' /usr/local/etc/php/conf.d/php.ini && \
-    sed -E -i 's|^;?short_open_tag = .*|short_open_tag = Off|g' /usr/local/etc/php/conf.d/php.ini && \
-    sed -E -i 's|^;?expose_php = .*|expose_php = Off|g' /usr/local/etc/php/conf.d/php.ini && \
-    sed -E -i 's|^;?opcache.enable=1|opcache.enable = 1|g' /usr/local/etc/php/conf.d/php.ini && \
-    sed -E -i 's|^;?opcache.memory_consumption=128|opcache.memory_consumption = 512|g' /usr/local/etc/php/conf.d/php.ini && \
-    sed -E -i 's|^;?opcache.interned_strings_buffer=8|opcache.interned_strings_buffer = 128|g' /usr/local/etc/php/conf.d/php.ini && \
-    sed -E -i 's|^;?opcache.max_accelerated_files=10000|opcache.max_accelerated_files = 1000000|g' /usr/local/etc/php/conf.d/php.ini && \
-    sed -E -i 's|^;?opcache.validate_timestamps=1|opcache.validate_timestamps = 0|g' /usr/local/etc/php/conf.d/php.ini
+    sed -E -i 's|^;?date.timezone ?= ?.*|date.timezone = Asia/Shanghai|g' /usr/local/etc/php/conf.d/php.ini && \
+    sed -E -i 's|^;?post_max_size ?= ?.*|post_max_size = 100M|g' /usr/local/etc/php/conf.d/php.ini && \
+    sed -E -i 's|^;?upload_max_filesize ?= ?.*|upload_max_filesize = 100M|g' /usr/local/etc/php/conf.d/php.ini && \
+    sed -E -i 's|^;?max_execution_time ?= ?.*|max_execution_time = 120|g' /usr/local/etc/php/conf.d/php.ini && \
+	sed -E -i 's|^;?max_input_time ?= ?.*|max_input_time = 30|g' /usr/local/etc/php/conf.d/php.ini && \
+	sed -E -i 's|^;?memory_limit ?= ?.*|memory_limit = 512M|g' /usr/local/etc/php/conf.d/php.ini && \
+	sed -E -i 's|^;?mysqli.max_persistent ?= ?.*|mysqli.max_persistent = 4|g' /usr/local/etc/php/conf.d/php.ini && \
+    sed -E -i 's|^;?short_open_tag ?= ?.*|short_open_tag = Off|g' /usr/local/etc/php/conf.d/php.ini && \
+    sed -E -i 's|^;?expose_php ?= ?.*|expose_php = Off|g' /usr/local/etc/php/conf.d/php.ini && \
+    sed -E -i 's|^;?opcache.enable ?= ?.*|opcache.enable = 1|g' /usr/local/etc/php/conf.d/php.ini && \
+    sed -E -i 's|^;?opcache.memory_consumption ?= ?.*|opcache.memory_consumption = 512|g' /usr/local/etc/php/conf.d/php.ini && \
+    sed -E -i 's|^;?opcache.interned_strings_buffer ?= ?.*|opcache.interned_strings_buffer = 128|g' /usr/local/etc/php/conf.d/php.ini && \
+    sed -E -i 's|^;?opcache.max_accelerated_files ?= ?.*|opcache.max_accelerated_files = 1000000|g' /usr/local/etc/php/conf.d/php.ini && \
+    sed -E -i 's|^;?opcache.validate_timestamps ?= ?.*|opcache.validate_timestamps = 0|g' /usr/local/etc/php/conf.d/php.inii
 
 ENV FPM_BIND=0.0.0.0
 ENV FPM_PORT=9000
