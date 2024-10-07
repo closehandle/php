@@ -3,44 +3,44 @@ FROM debian:bullseye-slim AS builder
 # prevent Debian's PHP packages from being installed
 # https://github.com/docker-library/php/pull/542
 RUN set -eux; \
-	{ \
-		echo 'Package: php*'; \
-		echo 'Pin: release *'; \
-		echo 'Pin-Priority: -1'; \
-	} > /etc/apt/preferences.d/no-debian-php
+    { \
+        echo 'Package: php*'; \
+        echo 'Pin: release *'; \
+        echo 'Pin-Priority: -1'; \
+    } > /etc/apt/preferences.d/no-debian-php
 
 # dependencies required for running "phpize"
 # (see persistent deps below)
 ENV PHPIZE_DEPS \
-		autoconf \
-		dpkg-dev \
-		file \
-		g++ \
-		gcc \
-		libc-dev \
-		make \
-		pkg-config \
-		re2c
+        autoconf \
+        dpkg-dev \
+        file \
+        g++ \
+        gcc \
+        libc-dev \
+        make \
+        pkg-config \
+        re2c
 
 # persistent / runtime deps
 RUN set -eux; \
-	apt-get update; \
-	apt-get install -y --no-install-recommends \
-		$PHPIZE_DEPS \
-		ca-certificates \
-		curl \
-		xz-utils \
-	; \
-	rm -rf /var/lib/apt/lists/*
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        $PHPIZE_DEPS \
+        ca-certificates \
+        curl \
+        xz-utils \
+    ; \
+    rm -rf /var/lib/apt/lists/*
 
 ENV PHP_INI_DIR /usr/local/etc/php
 RUN set -eux; \
-	mkdir -p "$PHP_INI_DIR/conf.d"; \
+    mkdir -p "$PHP_INI_DIR/conf.d"; \
 # allow running as an arbitrary user (https://github.com/docker-library/php/issues/743)
-	[ ! -d /var/www/html ]; \
-	mkdir -p /var/www/html; \
-	chown www-data:www-data /var/www/html; \
-	chmod 1777 /var/www/html
+    [ ! -d /var/www/html ]; \
+    mkdir -p /var/www/html; \
+    chown www-data:www-data /var/www/html; \
+    chmod 1777 /var/www/html
 
 # Apply stack smash protection to functions using local buffers and alloca()
 # Make PHP's main executable position-independent (improves ASLR security mechanism, and has no performance impact on x86_64)
@@ -59,155 +59,155 @@ ENV PHP_URL="https://www.php.net/distributions/php-8.0.30.tar.xz" PHP_ASC_URL="h
 ENV PHP_SHA256="216ab305737a5d392107112d618a755dc5df42058226f1670e9db90e77d777d9"
 
 RUN set -eux; \
-	\
-	savedAptMark="$(apt-mark showmanual)"; \
-	apt-get update; \
-	apt-get install -y --no-install-recommends gnupg; \
-	rm -rf /var/lib/apt/lists/*; \
-	\
-	mkdir -p /usr/src; \
-	cd /usr/src; \
-	\
-	curl -fsSL -o php.tar.xz "$PHP_URL"; \
-	\
-	if [ -n "$PHP_SHA256" ]; then \
-		echo "$PHP_SHA256 *php.tar.xz" | sha256sum -c -; \
-	fi; \
-	\
-	if [ -n "$PHP_ASC_URL" ]; then \
-		curl -fsSL -o php.tar.xz.asc "$PHP_ASC_URL"; \
-		export GNUPGHOME="$(mktemp -d)"; \
-		for key in $GPG_KEYS; do \
-			gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
-		done; \
-		gpg --batch --verify php.tar.xz.asc php.tar.xz; \
-		gpgconf --kill all; \
-		rm -rf "$GNUPGHOME"; \
-	fi; \
-	\
-	apt-mark auto '.*' > /dev/null; \
-	apt-mark manual $savedAptMark > /dev/null; \
-	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
+    \
+    savedAptMark="$(apt-mark showmanual)"; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends gnupg; \
+    rm -rf /var/lib/apt/lists/*; \
+    \
+    mkdir -p /usr/src; \
+    cd /usr/src; \
+    \
+    curl -fsSL -o php.tar.xz "$PHP_URL"; \
+    \
+    if [ -n "$PHP_SHA256" ]; then \
+        echo "$PHP_SHA256 *php.tar.xz" | sha256sum -c -; \
+    fi; \
+    \
+    if [ -n "$PHP_ASC_URL" ]; then \
+        curl -fsSL -o php.tar.xz.asc "$PHP_ASC_URL"; \
+        export GNUPGHOME="$(mktemp -d)"; \
+        for key in $GPG_KEYS; do \
+            gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
+        done; \
+        gpg --batch --verify php.tar.xz.asc php.tar.xz; \
+        gpgconf --kill all; \
+        rm -rf "$GNUPGHOME"; \
+    fi; \
+    \
+    apt-mark auto '.*' > /dev/null; \
+    apt-mark manual $savedAptMark > /dev/null; \
+    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
 
 COPY docker-php-source /usr/local/bin/
 
 RUN set -eux; \
-	\
-	savedAptMark="$(apt-mark showmanual)"; \
-	apt-get update; \
-	apt-get install -y --no-install-recommends \
-		libargon2-dev \
-		libcurl4-openssl-dev \
-		libonig-dev \
-		libreadline-dev \
-		libsodium-dev \
-		libsqlite3-dev \
-		libssl-dev \
-		libxml2-dev \
-		zlib1g-dev \
-	; \
-	\
-	export \
-		CFLAGS="$PHP_CFLAGS" \
-		CPPFLAGS="$PHP_CPPFLAGS" \
-		LDFLAGS="$PHP_LDFLAGS" \
+    \
+    savedAptMark="$(apt-mark showmanual)"; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        libargon2-dev \
+        libcurl4-openssl-dev \
+        libonig-dev \
+        libreadline-dev \
+        libsodium-dev \
+        libsqlite3-dev \
+        libssl-dev \
+        libxml2-dev \
+        zlib1g-dev \
+    ; \
+    \
+    export \
+        CFLAGS="$PHP_CFLAGS" \
+        CPPFLAGS="$PHP_CPPFLAGS" \
+        LDFLAGS="$PHP_LDFLAGS" \
 # https://github.com/php/php-src/blob/d6299206dd828382753453befd1b915491b741c6/configure.ac#L1496-L1511
-		PHP_BUILD_PROVIDER='https://github.com/docker-library/php' \
-		PHP_UNAME='Linux - Docker' \
-	; \
-	docker-php-source extract; \
-	cd /usr/src/php; \
-	gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; \
-	debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
+        PHP_BUILD_PROVIDER='https://github.com/docker-library/php' \
+        PHP_UNAME='Linux - Docker' \
+    ; \
+    docker-php-source extract; \
+    cd /usr/src/php; \
+    gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; \
+    debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
 # https://bugs.php.net/bug.php?id=74125
-	if [ ! -d /usr/include/curl ]; then \
-		ln -sT "/usr/include/$debMultiarch/curl" /usr/local/include/curl; \
-	fi; \
-	./configure \
-		--build="$gnuArch" \
-		--with-config-file-path="$PHP_INI_DIR" \
-		--with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
-		\
+    if [ ! -d /usr/include/curl ]; then \
+        ln -sT "/usr/include/$debMultiarch/curl" /usr/local/include/curl; \
+    fi; \
+    ./configure \
+        --build="$gnuArch" \
+        --with-config-file-path="$PHP_INI_DIR" \
+        --with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
+        \
 # make sure invalid --configure-flags are fatal errors instead of just warnings
-		--enable-option-checking=fatal \
-		\
+        --enable-option-checking=fatal \
+        \
 # https://github.com/docker-library/php/issues/439
-		--with-mhash \
-		\
+        --with-mhash \
+        \
 # https://github.com/docker-library/php/issues/822
-		--with-pic \
-		\
+        --with-pic \
+        \
 # --enable-mbstring is included here because otherwise there's no way to get pecl to use it properly (see https://github.com/docker-library/php/issues/195)
-		--enable-mbstring \
+        --enable-mbstring \
 # --enable-mysqlnd is included here because it's harder to compile after the fact than extensions are (since it's a plugin for several extensions, not an extension in itself)
-		--enable-mysqlnd \
+        --enable-mysqlnd \
 # https://wiki.php.net/rfc/argon2_password_hash
-		--with-password-argon2 \
+        --with-password-argon2 \
 # https://wiki.php.net/rfc/libsodium
-		--with-sodium=shared \
+        --with-sodium=shared \
 # always build against system sqlite3 (https://github.com/php/php-src/commit/6083a387a81dbbd66d6316a3a12a63f06d5f7109)
-		--with-pdo-sqlite=/usr \
-		--with-sqlite3=/usr \
-		\
-		--with-curl \
-		--with-iconv \
-		--with-openssl \
-		--with-readline \
-		--with-zlib \
-		\
+        --with-pdo-sqlite=/usr \
+        --with-sqlite3=/usr \
+        \
+        --with-curl \
+        --with-iconv \
+        --with-openssl \
+        --with-readline \
+        --with-zlib \
+        \
 # https://github.com/bwoebi/phpdbg-docs/issues/1#issuecomment-163872806 ("phpdbg is primarily a CLI debugger, and is not suitable for debugging an fpm stack.")
-		--disable-phpdbg \
-		\
+        --disable-phpdbg \
+        \
 # in PHP 7.4+, the pecl/pear installers are officially deprecated (requiring an explicit "--with-pear")
-		--with-pear \
-		\
-		--with-libdir="lib/$debMultiarch" \
-		\
-		--disable-cgi \
-		\
-		--enable-fpm \
-		--with-fpm-user=www-data \
-		--with-fpm-group=www-data \
-	; \
-	make -j "$(nproc)"; \
-	find -type f -name '*.a' -delete; \
-	make install; \
-	find \
-		/usr/local \
-		-type f \
-		-perm '/0111' \
-		-exec sh -euxc ' \
-			strip --strip-all "$@" || : \
-		' -- '{}' + \
-	; \
-	make clean; \
-	\
+        --with-pear \
+        \
+        --with-libdir="lib/$debMultiarch" \
+        \
+        --disable-cgi \
+        \
+        --enable-fpm \
+        --with-fpm-user=www-data \
+        --with-fpm-group=www-data \
+    ; \
+    make -j "$(nproc)"; \
+    find -type f -name '*.a' -delete; \
+    make install; \
+    find \
+        /usr/local \
+        -type f \
+        -perm '/0111' \
+        -exec sh -euxc ' \
+            strip --strip-all "$@" || : \
+        ' -- '{}' + \
+    ; \
+    make clean; \
+    \
 # https://github.com/docker-library/php/issues/692 (copy default example "php.ini" files somewhere easily discoverable)
-	cp -v php.ini-* "$PHP_INI_DIR/"; \
-	\
-	cd /; \
-	docker-php-source delete; \
-	\
+    cp -v php.ini-* "$PHP_INI_DIR/"; \
+    \
+    cd /; \
+    docker-php-source delete; \
+    \
 # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
-	apt-mark auto '.*' > /dev/null; \
-	[ -z "$savedAptMark" ] || apt-mark manual $savedAptMark; \
-	find /usr/local -type f -executable -exec ldd '{}' ';' \
-		| awk '/=>/ { so = $(NF-1); if (index(so, "/usr/local/") == 1) { next }; gsub("^/(usr/)?", "", so); printf "*%s\n", so }' \
-		| sort -u \
-		| xargs -r dpkg-query --search \
-		| cut -d: -f1 \
-		| sort -u \
-		| xargs -r apt-mark manual \
-	; \
-	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
-	rm -rf /var/lib/apt/lists/*; \
-	\
+    apt-mark auto '.*' > /dev/null; \
+    [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark; \
+    find /usr/local -type f -executable -exec ldd '{}' ';' \
+        | awk '/=>/ { so = $(NF-1); if (index(so, "/usr/local/") == 1) { next }; gsub("^/(usr/)?", "", so); printf "*%s\n", so }' \
+        | sort -u \
+        | xargs -r dpkg-query --search \
+        | cut -d: -f1 \
+        | sort -u \
+        | xargs -r apt-mark manual \
+    ; \
+    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+    rm -rf /var/lib/apt/lists/*; \
+    \
 # update pecl channel definitions https://github.com/docker-library/php/issues/443
-	pecl update-channels; \
-	rm -rf /tmp/pear ~/.pearrc; \
-	\
+    pecl update-channels; \
+    rm -rf /tmp/pear ~/.pearrc; \
+    \
 # smoke test
-	php --version
+    php --version
 
 COPY docker-php-ext-* docker-php-entrypoint /usr/local/bin/
 
@@ -218,48 +218,48 @@ ENTRYPOINT ["docker-php-entrypoint"]
 WORKDIR /var/www/html
 
 RUN set -eux; \
-	cd /usr/local/etc; \
-	if [ -d php-fpm.d ]; then \
-		# for some reason, upstream's php-fpm.conf.default has "include=NONE/etc/php-fpm.d/*.conf"
-		sed 's!=NONE/!=!g' php-fpm.conf.default | tee php-fpm.conf > /dev/null; \
-		cp php-fpm.d/www.conf.default php-fpm.d/www.conf; \
-	else \
-		# PHP 5.x doesn't use "include=" by default, so we'll create our own simple config that mimics PHP 7+ for consistency
-		mkdir php-fpm.d; \
-		cp php-fpm.conf.default php-fpm.d/www.conf; \
-		{ \
-			echo '[global]'; \
-			echo 'include=etc/php-fpm.d/*.conf'; \
-		} | tee php-fpm.conf; \
-	fi; \
-	{ \
-		echo '[global]'; \
-		echo 'error_log = /proc/self/fd/2'; \
-		echo; echo '; https://github.com/docker-library/php/pull/725#issuecomment-443540114'; echo 'log_limit = 8192'; \
-		echo; \
-		echo '[www]'; \
-		echo '; php-fpm closes STDOUT on startup, so sending logs to /proc/self/fd/1 does not work.'; \
-		echo '; https://bugs.php.net/bug.php?id=73886'; \
-		echo 'access.log = /proc/self/fd/2'; \
-		echo; \
-		echo 'clear_env = no'; \
-		echo; \
-		echo '; Ensure worker stdout and stderr are sent to the main error log.'; \
-		echo 'catch_workers_output = yes'; \
-		echo 'decorate_workers_output = no'; \
-	} | tee php-fpm.d/docker.conf; \
-	{ \
-		echo '[global]'; \
-		echo 'daemonize = no'; \
-		echo; \
-		echo '[www]'; \
-		echo 'listen = 9000'; \
-	} | tee php-fpm.d/zz-docker.conf; \
-	mkdir -p "$PHP_INI_DIR/conf.d"; \
-	{ \
-		echo '; https://github.com/docker-library/php/issues/878#issuecomment-938595965'; \
-		echo 'fastcgi.logging = Off'; \
-	} > "$PHP_INI_DIR/conf.d/docker-fpm.ini"
+    cd /usr/local/etc; \
+    if [ -d php-fpm.d ]; then \
+        # for some reason, upstream's php-fpm.conf.default has "include=NONE/etc/php-fpm.d/*.conf"
+        sed 's!=NONE/!=!g' php-fpm.conf.default | tee php-fpm.conf > /dev/null; \
+        cp php-fpm.d/www.conf.default php-fpm.d/www.conf; \
+    else \
+        # PHP 5.x doesn't use "include=" by default, so we'll create our own simple config that mimics PHP 7+ for consistency
+        mkdir php-fpm.d; \
+        cp php-fpm.conf.default php-fpm.d/www.conf; \
+        { \
+            echo '[global]'; \
+            echo 'include=etc/php-fpm.d/*.conf'; \
+        } | tee php-fpm.conf; \
+    fi; \
+    { \
+        echo '[global]'; \
+        echo 'error_log = /proc/self/fd/2'; \
+        echo; echo '; https://github.com/docker-library/php/pull/725#issuecomment-443540114'; echo 'log_limit = 8192'; \
+        echo; \
+        echo '[www]'; \
+        echo '; php-fpm closes STDOUT on startup, so sending logs to /proc/self/fd/1 does not work.'; \
+        echo '; https://bugs.php.net/bug.php?id=73886'; \
+        echo 'access.log = /proc/self/fd/2'; \
+        echo; \
+        echo 'clear_env = no'; \
+        echo; \
+        echo '; Ensure worker stdout and stderr are sent to the main error log.'; \
+        echo 'catch_workers_output = yes'; \
+        echo 'decorate_workers_output = no'; \
+    } | tee php-fpm.d/docker.conf; \
+    { \
+        echo '[global]'; \
+        echo 'daemonize = no'; \
+        echo; \
+        echo '[www]'; \
+        echo 'listen = 9000'; \
+    } | tee php-fpm.d/zz-docker.conf; \
+    mkdir -p "$PHP_INI_DIR/conf.d"; \
+    { \
+        echo '; https://github.com/docker-library/php/issues/878#issuecomment-938595965'; \
+        echo 'fastcgi.logging = Off'; \
+    } > "$PHP_INI_DIR/conf.d/docker-fpm.ini"
 
 # Override stop signal to stop process gracefully
 # https://github.com/php/php-src/blob/17baa87faddc2550def3ae7314236826bc1b1398/sapi/fpm/php-fpm.8.in#L163
@@ -284,27 +284,27 @@ RUN chmod +x /usr/bin/install-php-extensions && install-php-extensions \
     exif \
     gd \
     gmp \
-	grpc \
+    grpc \
     igbinary \
     imagick \
     imap \
     intl \
     ldap \
-	lz4 \
-	lzf \
-	msgpack \
+    lz4 \
+    lzf \
+    msgpack \
     mysqli \
     opcache \
     pcntl \
     pdo_mysql \
     redis \
-	soap \
+    soap \
     sockets \
     ssh2 \
-	sync \
-	tidy \
+    sync \
+    tidy \
     uuid \
-	yaml \
+    yaml \
     zip \
     zstd
 
@@ -319,9 +319,9 @@ RUN chmod +x /usr/bin/entrypoint.sh && \
     sed -E -i 's|^;?post_max_size ?= ?.*|post_max_size = 100M|g' /usr/local/etc/php/conf.d/php.ini && \
     sed -E -i 's|^;?upload_max_filesize ?= ?.*|upload_max_filesize = 100M|g' /usr/local/etc/php/conf.d/php.ini && \
     sed -E -i 's|^;?max_execution_time ?= ?.*|max_execution_time = 120|g' /usr/local/etc/php/conf.d/php.ini && \
-	sed -E -i 's|^;?max_input_time ?= ?.*|max_input_time = 30|g' /usr/local/etc/php/conf.d/php.ini && \
-	sed -E -i 's|^;?memory_limit ?= ?.*|memory_limit = 512M|g' /usr/local/etc/php/conf.d/php.ini && \
-	sed -E -i 's|^;?mysqli.max_persistent ?= ?.*|mysqli.max_persistent = 4|g' /usr/local/etc/php/conf.d/php.ini && \
+    sed -E -i 's|^;?max_input_time ?= ?.*|max_input_time = 30|g' /usr/local/etc/php/conf.d/php.ini && \
+    sed -E -i 's|^;?memory_limit ?= ?.*|memory_limit = 512M|g' /usr/local/etc/php/conf.d/php.ini && \
+    sed -E -i 's|^;?mysqli.max_persistent ?= ?.*|mysqli.max_persistent = 4|g' /usr/local/etc/php/conf.d/php.ini && \
     sed -E -i 's|^;?short_open_tag ?= ?.*|short_open_tag = Off|g' /usr/local/etc/php/conf.d/php.ini && \
     sed -E -i 's|^;?expose_php ?= ?.*|expose_php = Off|g' /usr/local/etc/php/conf.d/php.ini && \
     sed -E -i 's|^;?opcache.enable ?= ?.*|opcache.enable = 1|g' /usr/local/etc/php/conf.d/php.ini && \
